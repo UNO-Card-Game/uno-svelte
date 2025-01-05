@@ -37,12 +37,23 @@
   });
 
   function drawCard() {
-    // Implement the logic to draw a card
     console.log("Draw card button clicked");
+
+    websocket.update((socket) => {
+      if (socket) {
+        socket.send(
+          JSON.stringify({
+            type: "DRAW_CARD",
+            obj: {},
+          })
+        );
+      }
+      return socket;
+    });
   }
 
-  function playCard(card, index) {
-    console.log("Play card button clicked", card);
+  function playCard(card, index, color = null) {
+    console.log("Play card button clicked", card, color);
 
     websocket.update((socket) => {
       if (socket) {
@@ -51,6 +62,7 @@
             type: "PLAY_CARD",
             obj: {
               card_index: index,
+              new_color: color,
             },
           }),
         );
@@ -65,6 +77,11 @@
     } else {
       return `/src/assets/cards/${card.Color}-${card.Rank}.svg`;
     }
+  }
+
+  function selectColor(card, index, color) {
+    console.log("Color selected:", color);
+    playCard(card, index, color);
   }
 </script>
 
@@ -140,7 +157,7 @@
                 </thead>
                 <tbody>
                   {#each gameState?.room?.players as player}
-                    <tr>
+                    <tr class="{gameState?.game?.turn === player && gameState?.player?.Name === player ? 'client-turn' : ''}">
                       <td>{player}</td>
                       <td>
                         {#if gameState?.game?.turn === player}
@@ -153,9 +170,8 @@
               </table>
               <img
                 src={getCardImage(gameState?.game?.topcard)}
-                alt="{gameState?.game?.topcard?.Rank} {gameState?.game?.topcard
-                  ?.Color}"
-                class="top-card"
+                alt="{gameState?.game?.topcard?.Rank} {gameState?.game?.topcard?.Color}"
+                class="top-card {gameState?.game?.topcolor}"
               />
               <button
                 class="nes-btn"
@@ -169,12 +185,22 @@
               <h3 style="text-align: center;">Your Cards</h3>
               <div class="cards-container">
                 {#each gameState?.player?.Cards as card, index}
-                  <img
-                    src={getCardImage(card)}
-                    alt="{card.Rank} {card.Color}"
-                    class="card"
-                    on:click={() => playCard(card, index)}
-                  />
+                  <div class="card-container">
+                    <img
+                      src={getCardImage(card)}
+                      alt="{card.Rank} {card.Color}"
+                      class="card"
+                      on:click={() => playCard(card, index)}
+                    />
+                    {#if card.Rank === "wild" || card.Rank === "draw_4"}
+                      <div class="color-picker">
+                        <button class="nes-btn is-primary" on:click={() => selectColor(card, index, 'blue')}>Blue</button>
+                        <button class="nes-btn is-success" on:click={() => selectColor(card, index, 'green')}>Green</button>
+                        <button class="nes-btn is-warning" on:click={() => selectColor(card, index, 'yellow')}>Yellow</button>
+                        <button class="nes-btn is-error" on:click={() => selectColor(card, index, 'red')}>Red</button>
+                      </div>
+                    {/if}
+                  </div>
                 {/each}
               </div>
               <h5 style="text-align: center;">
@@ -247,6 +273,32 @@
   .top-card {
     width: 150px;
     height: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .top-card.blue {
+    border: 15px solid rgba(0, 0, 255, 0.5);
+    box-shadow: 0 0 20px 10px rgba(0, 0, 255, 0.3);
+    background: rgba(0, 0, 255, 0.1);
+  }
+
+  .top-card.green {
+    border: 15px solid rgba(0, 255, 0, 0.5);
+    box-shadow: 0 0 20px 10px rgba(0, 255, 0, 0.3);
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .top-card.red {
+    border: 15px solid rgba(255, 0, 0, 0.5);
+    box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.3);
+    background: rgba(255, 0, 0, 0.1);
+  }
+
+  .top-card.yellow {
+    border: 15px solid rgba(255, 255, 0, 0.5);
+    box-shadow: 0 0 20px 10px rgba(255, 255, 0, 0.3);
+    background: rgba(255, 255, 0, 0.1);
   }
 
   .players-table {
@@ -266,5 +318,30 @@
   .cards-container {
     display: flex;
     justify-content: center;
+  }
+
+  .card-container {
+    position: relative;
+  }
+
+  .color-picker {
+    display: none;
+    position: absolute;
+    margin-top: 2px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .card-container:hover .color-picker {
+    display: block;
+    opacity: 1;
+  }
+
+  .current-player {
+    background-color: lightgreen;
+  }
+
+  .client-turn {
+    background-color: lightgreen;
   }
 </style>
