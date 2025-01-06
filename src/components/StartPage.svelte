@@ -6,10 +6,10 @@
 
 <div class="container">
   <h1 class="title">Uno Multiplayer Game</h1>
-  <Link class="nes-btn is-primary button" to="/create-room" style="margin-bottom: 20px;">
+  <Link class="nes-btn is-primary button" to="/uno/create-room" style="margin-bottom: 20px;">
     Create Room
   </Link>
-  <Link class="nes-btn is-success button" to="/join-room">
+  <Link class="nes-btn is-success button" to="/uno/join-room">
     Join Room
   </Link>
 </div>
