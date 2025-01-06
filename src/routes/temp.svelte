@@ -102,7 +102,7 @@
                     <div class="top-card-container">
                         <div class="arrow-container">
                             <img
-                                src="/src/assets/arrow.svg"
+                                src="src/assets/arrow.svg"
                                 alt="arrow"
                                 class="arrow"
                                 style="transform: rotate({gameState.game.reverse ? 180 : 0}deg);"

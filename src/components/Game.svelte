@@ -73,9 +73,9 @@
 
   function getCardImage(card: any) {
     if (card.Rank == "wild" || card.Rank == "draw_4") {
-      return `./assets/cards/${card.Rank}.svg`;
+      return `assets/cards/${card.Rank}.svg`;
     } else {
-      return `./assets/cards/${card.Color}-${card.Rank}.svg`;
+      return `assets/cards/${card.Color}-${card.Rank}.svg`;
     }
   }
 
@@ -140,7 +140,7 @@
             <div class="top-card-container">
               <div class="arrow-container">
                 <img
-                  src="./assets/arrow.svg"
+                  src="assets/arrow.svg"
                   alt="arrow"
                   class="arrow"
                   style="transform: rotate({gameState?.game?.reverse
