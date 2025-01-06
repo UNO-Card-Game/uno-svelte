@@ -7,6 +7,6 @@ export default defineConfig({
     emptyOutDir: true,
   },
   plugins: [svelte()],
-  base: '/uno' 
+  base: './'
 
 });
