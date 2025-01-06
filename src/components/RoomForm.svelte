@@ -15,7 +15,7 @@
     const websocketUrl = `${WEBSOCKET_BASE_URL}/${endpoint}?${queryParams}`;
     console.log('Connecting to WebSocket:', websocketUrl);
     connectWebSocket(websocketUrl);
-    navigate('/game');
+    navigate('/uno/game');
   };
 </script>
 
