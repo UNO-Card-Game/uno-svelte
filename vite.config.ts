@@ -6,4 +6,7 @@ export default defineConfig({
     outDir: '/home/ubuntu/devops/site', // Output directory for build files
     emptyOutDir: true,
   },
+  plugins: [svelte()],
+  base: '/uno' 
+
 });
