@@ -1,7 +1,7 @@
 <script lang="ts">
   import { connectWebSocket } from '../stores/websocketStore';
   import { navigate } from 'svelte-routing';
-  const WEBSOCKET_BASE_URL = 'wss://api';
+  const WEBSOCKET_BASE_URL = `wss://${window.location.hostname}/api`;
 
   export let title: string;
   export let endpoint: string;
